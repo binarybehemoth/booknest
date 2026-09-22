@@ -1,0 +1,16 @@
+# Dependencies: npm ci recreates them from package-lock.json
+node_modules/
+
+# Secrets and local settings: commit only the example file
+.env
+.env.*
+!.env.example
+
+# Logs, coverage and runtime files
+*.log
+coverage/
+*.pid
+
+# Operating-system clutter
+.DS_Store
+Thumbs.db
