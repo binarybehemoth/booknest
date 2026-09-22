@@ -29,3 +29,7 @@ The schema and the six-book seed catalog (`db/schema.sql`,
 
 `PORT` (default `3000`), and `PGHOST`, `PGPORT`, `PGUSER`,
 `PGPASSWORD`, `PGDATABASE` (defaults match `docker-compose.yml`).
+
+## Local configuration
+
+Copy `.env.example` to `.env` and edit it. Git ignores `.env`.
