@@ -22,7 +22,7 @@ The schema and the six-book seed catalog (`db/schema.sql`,
 |--------|------------------|--------------------------------------|
 | GET    | `/health`        | Liveness, no database check          |
 | GET    | `/ready`         | Readiness, `SELECT 1` on PostgreSQL  |
-| GET    | `/api/books`     | All books; `?genre=`, `?inStock=`, `?sort=` |
+| GET    | `/api/books`     | All books; `?genre=`, `?inStock=`, `?q=`, `?sort=` |
 | GET    | `/api/books/:id` | One book by id, or 404               |
 
 ## Environment variables
