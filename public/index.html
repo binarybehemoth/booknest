@@ -18,6 +18,7 @@
 <body>
 <h1>BookNest</h1>
 <p class="sub">A small bookshop's catalog, served by its own REST API.</p>
+<form><input type="search" name="q" placeholder="Search titles"> <button>Search</button></form>
 <table id="catalog">
   <thead>
     <tr><th>Title</th><th>Author</th><th>Genre</th><th class="price">Price</th><th>Rating</th><th>Stock</th></tr>
@@ -25,7 +26,7 @@
   <tbody></tbody>
 </table>
 <script>
-  fetch('/api/books')
+  fetch('/api/books' + location.search)
     .then((r) => r.json())
     .then((books) => {
       const tbody = document.querySelector('#catalog tbody');
