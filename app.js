@@ -41,6 +41,10 @@ function createApp() {
         params.push(req.query.inStock === 'true');
         clauses.push(`in_stock = $${params.length}`);
       }
+      if (req.query.q) {
+        params.push(`%${req.query.q}%`);
+        clauses.push(`title ILIKE $${params.length}`);
+      }
       const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
       const { rows } = await db.query(
         `SELECT id, title, author, genre, price::float8 AS price, rating::float8 AS rating,
