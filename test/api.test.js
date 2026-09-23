@@ -64,6 +64,13 @@ test('GET /api/books?inStock=false filters by stock status', async () => {
   assert.equal(books[0].inStock, false);
 });
 
+test('GET /api/books?q= searches titles without regard to case', async () => {
+  const res = await fetch(`${baseUrl}/api/books?q=salt`);
+  const books = await res.json();
+  assert.equal(books.length, 1);
+  assert.equal(books[0].title, 'Salt and Saffron');
+});
+
 test('GET /api/books/:id returns a single book', async () => {
   const res = await fetch(`${baseUrl}/api/books/3`);
   assert.equal(res.status, 200);
