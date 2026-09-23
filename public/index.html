@@ -31,9 +31,11 @@
       const tbody = document.querySelector('#catalog tbody');
       for (const b of books) {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${b.title}</td><td>${b.author}</td><td>${b.genre}</td>` +
-          `<td class="price">$${Number(b.price).toFixed(2)}</td><td>${b.rating}</td>` +
-          `<td class="${b.inStock ? '' : 'out-of-stock'}">${b.inStock ? 'In stock' : 'Out of stock'}</td>`;
+        const cells = [b.title, b.author, b.genre, `$${Number(b.price).toFixed(2)}`, b.rating,
+          b.inStock ? 'In stock' : 'Out of stock'];
+        for (const text of cells) tr.insertCell().textContent = text;
+        tr.cells[3].className = 'price';
+        if (!b.inStock) tr.cells[5].className = 'out-of-stock';
         tbody.appendChild(tr);
       }
     })
