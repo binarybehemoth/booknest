@@ -25,6 +25,9 @@ The schema and the six-book seed catalog (`db/schema.sql`,
 | GET    | `/api/books`     | All books; `?genre=`, `?inStock=`, `?q=`, `?sort=` |
 | GET    | `/api/books/:id` | One book by id, or 404               |
 
+`/api/books` returns at most 20 books at a time: `?limit=` (up to 100)
+and `?offset=` page through the rest.
+
 ## Environment variables
 
 `PORT` (default `3000`), and `PGHOST`, `PGPORT`, `PGUSER`,
