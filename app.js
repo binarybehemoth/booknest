@@ -50,6 +50,8 @@ function createApp() {
       const order = sorts[req.query.sort] || 'id';
       params.push(Math.min(Number(req.query.limit) || 20, 100));
       let page = `LIMIT $${params.length}`;
+      params.push(Math.max(Number(req.query.offset) || 0, 0));
+      page += ` OFFSET $${params.length}`;
       const { rows } = await db.query(
         `SELECT id, title, author, genre, price::float8 AS price, rating::float8 AS rating,
                 pages, year, in_stock AS "inStock", summary
