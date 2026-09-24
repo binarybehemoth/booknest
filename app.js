@@ -51,7 +51,7 @@ function createApp() {
       const { rows } = await db.query(
         `SELECT id, title, author, genre, price::float8 AS price, rating::float8 AS rating,
                 pages, year, in_stock AS "inStock", summary
-         FROM books ${where} ORDER BY ${order}`,
+         FROM books ${where} ORDER BY ${order}, id`,
         params
       );
       res.json(rows);
