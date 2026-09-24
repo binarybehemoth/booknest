@@ -48,10 +48,12 @@ function createApp() {
       const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
       const sorts = { price: 'price', rating: 'rating DESC', year: 'year DESC' };
       const order = sorts[req.query.sort] || 'id';
+      params.push(Math.min(Number(req.query.limit) || 20, 100));
+      let page = `LIMIT $${params.length}`;
       const { rows } = await db.query(
         `SELECT id, title, author, genre, price::float8 AS price, rating::float8 AS rating,
                 pages, year, in_stock AS "inStock", summary
-         FROM books ${where} ORDER BY ${order}, id`,
+         FROM books ${where} ORDER BY ${order}, id ${page}`,
         params
       );
       res.json(rows);
