@@ -16,6 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: npm audit --omit=dev --audit-level=high
-      - run: echo "Audited at $(date +%H:%M) $TZ, ${{ github.event_name }} ${{ github.event.schedule }}"
+      - run: echo "Audited $(date +%H:%M) $TZ, ${{ github.event_name }} ${{ github.event.schedule }}"
         env:
           TZ: Asia/Kuala_Lumpur
