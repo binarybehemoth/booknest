@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question about using BookNest
+    url: https://github.com/binarybehemoth/booknest#readme
+    about: Read the README's quick start and API table first.

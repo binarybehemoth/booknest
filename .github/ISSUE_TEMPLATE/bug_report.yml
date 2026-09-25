@@ -1,0 +1,40 @@
+name: Bug report
+description: Something in the BookNest API or catalog page does not work as documented.
+title: "[Bug]: "
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! Please check the open issues for a duplicate first.
+  - type: input
+    id: version
+    attributes:
+      label: BookNest version
+      description: The `version` in package.json, or a commit id.
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A curl command or the exact clicks, starting from `npm start`.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - REST API
+        - Catalog page
+        - Database or seed data
+    validations:
+      required: true
