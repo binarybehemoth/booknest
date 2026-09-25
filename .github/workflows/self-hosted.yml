@@ -1,0 +1,18 @@
+# Runs only on lane 1's self-hosted demo runner, and only when the owner dispatches it.
+name: Self-hosted demo
+on: workflow_dispatch
+permissions:
+  contents: read
+
+jobs:
+  where:
+    runs-on: [self-hosted, l1-booknest-demo]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Show where the job ran
+        run: |
+          echo "runner: $RUNNER_NAME ($RUNNER_OS, $RUNNER_ARCH)"
+          echo "user: $(whoami) on $(hostname)"
+          echo "workspace: $GITHUB_WORKSPACE"
+          echo "books in the seed: $(grep -c '"title"' db/seed.json)"
