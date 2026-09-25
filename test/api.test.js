@@ -127,3 +127,9 @@ test('GET /api/books rejects an unknown sort key', async () => {
   const res = await fetch(`${baseUrl}/api/books?sort=colour`);
   assert.equal(res.status, 400);
 });
+
+test('GET /api/books?minRating= keeps books rated at least that high', async () => {
+  const res = await fetch(`${baseUrl}/api/books?minRating=4.6`);
+  const books = await res.json();
+  assert.deepEqual(books.map((b) => b.id), [1, 3]);
+});
