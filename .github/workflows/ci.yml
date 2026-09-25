@@ -1,0 +1,82 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.os }}, node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+        node: [24, 26]
+        experimental: [false]
+        exclude:
+          - {os: ubuntu-24.04-arm, node: 26}
+        include:
+          - {os: ubuntu-24.04, node: 22, experimental: true}
+    services:
+      postgres:
+        image: postgres:18
+        env: {POSTGRES_USER: booknest, POSTGRES_PASSWORD: booknest, POSTGRES_DB: booknest}
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U booknest" --health-interval 5s
+          --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - name: Test against PostgreSQL
+        run: >-
+          npm test -- --test-reporter=spec --test-reporter-destination=stdout
+          --test-reporter=junit --test-reporter-destination=junit.xml
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: junit-${{ matrix.os }}-node${{ matrix.node }}
+          path: junit.xml
+          retention-days: 14
+
+  package:
+    needs: test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: {node-version-file: .nvmrc, cache: npm}
+      - run: npm ci --omit=dev
+      - run: tar czf booknest.tgz package.json app.js server.js db public node_modules
+      - uses: actions/upload-artifact@v7
+        with: {name: booknest-app, path: booknest.tgz}
+
+  booknest-tests:
+    name: booknest/tests
+    needs: test
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v8
+        with: {pattern: junit-*, path: results}
+      - name: Summarize the test results
+        run: |
+          echo "| Job | Tests | Failures |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          for f in results/*/junit.xml; do
+            job=$(basename "$(dirname "$f")")
+            tests=$(grep -c '<testcase' "$f"); failed=$(grep -c '<failure' "$f" || true)
+            echo "| $job | $tests | $failed |" >> "$GITHUB_STEP_SUMMARY"
+            [ "$failed" = 0 ] || echo "::error title=$job::$failed failing tests in $job"
+          done
+      - if: needs.test.result != 'success'
+        run: exit 1
