@@ -26,4 +26,4 @@ jobs:
     steps:
       - env:
           SHELF_API_KEY: ${{ secrets.SHELF_API_KEY }}
-        run: echo "Deploying ${GITHUB_SHA::7} to ${{ vars.CATALOG_REGION }}, key $SHELF_API_KEY"
+        run: echo "Deploy ${GITHUB_SHA::7} to ${{ vars.CATALOG_REGION }}, key $SHELF_API_KEY"
