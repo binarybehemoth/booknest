@@ -51,7 +51,7 @@ function createApp() {
       }
       if (req.query.minRating !== undefined) {
         params.push(Number(req.query.minRating));
-        clauses.push(`rating > $${params.length}`);
+        clauses.push(`rating >= $${params.length}`);
       }
       const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
       const sorts = { price: 'price', rating: 'rating DESC', year: 'year DESC', title: 'title' };
