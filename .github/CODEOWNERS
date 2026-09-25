@@ -1,0 +1,6 @@
+# Default owner of everything in the repository
+*          @binarybehemoth
+
+# Later matches win: database schema and seed data, then GitHub configuration
+/db/       @binarybehemoth
+/.github/  @binarybehemoth
