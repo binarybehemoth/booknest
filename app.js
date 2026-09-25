@@ -46,8 +46,8 @@ function createApp() {
         clauses.push(`title ILIKE $${params.length}`);
       }
       if (req.query.author) {
-        params.push(req.query.author);
-        clauses.push(`author = $${params.length}`);
+        params.push(`%${req.query.author}%`);
+        clauses.push(`author ILIKE $${params.length}`);
       }
       const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
       const sorts = { price: 'price', rating: 'rating DESC', year: 'year DESC', title: 'title' };
