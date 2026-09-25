@@ -64,6 +64,17 @@ function createApp() {
     }
   });
 
+  app.get('/api/genres', async (req, res, next) => {
+    try {
+      const { rows } = await db.query(
+        'SELECT genre, COUNT(*)::int AS count FROM books GROUP BY genre ORDER BY genre'
+      );
+      res.json(rows);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   app.get('/api/books/:id', async (req, res, next) => {
     const id = Number(req.params.id);
     if (!Number.isInteger(id)) {

@@ -71,6 +71,13 @@ test('GET /api/books?q= searches titles without regard to case', async () => {
   assert.equal(books[0].title, 'Salt and Saffron');
 });
 
+test('GET /api/genres counts the books in each genre', async () => {
+  const res = await fetch(`${baseUrl}/api/genres`);
+  const genres = await res.json();
+  assert.equal(genres.length, 6);
+  assert.deepEqual(genres[0], { genre: 'Cooking', count: 1 });
+});
+
 test('GET /api/books/:id returns a single book', async () => {
   const res = await fetch(`${baseUrl}/api/books/3`);
   assert.equal(res.status, 200);
