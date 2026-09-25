@@ -1,0 +1,21 @@
+# Section 3.9.3: a scheduled audit of BookNest's locked dependencies.
+name: Nightly audit
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"        # every 15 minutes while you watch; nightly: "30 2 * * *"
+      timezone: "Asia/Kuala_Lumpur"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - run: npm audit --omit=dev --audit-level=high
+      - run: echo "Audited at $(date +%H:%M) in $TZ for ${{ github.event_name }}"
+        env:
+          TZ: Asia/Kuala_Lumpur

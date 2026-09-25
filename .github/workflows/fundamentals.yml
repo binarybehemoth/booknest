@@ -1,0 +1,100 @@
+# Section 3.9: the building blocks of a workflow, run on BookNest's own files.
+name: Fundamentals
+run-name: Fundamentals on ${{ github.event_name }} by @${{ github.actor }}
+
+on:
+  push:
+    branches: [main]
+    paths: ["**.js", "db/**", ".github/workflows/fundamentals.yml"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      genre:
+        description: Genre to count in the seed data
+        type: choice
+        options: [Cooking, Fiction, Travel]
+        default: Cooking
+      runner:
+        description: Runner label for the context job
+        type: string
+        default: ubuntu-24.04
+      break-syntax:
+        description: Make the syntax job fail on purpose
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-24.04
+    outputs:
+      checked: ${{ steps.check.outputs.checked }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: check
+        name: Parse every JavaScript file
+        run: |
+          files=$(git ls-files '*.js')
+          for f in $files; do node --check "$f"; done
+          echo "checked=$(echo $files | wc -w)" >> "$GITHUB_OUTPUT"
+      - if: inputs.break-syntax
+        run: exit 1
+
+  catalog:
+    needs: syntax
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Count one genre
+        env:
+          GENRE: ${{ inputs.genre || 'Cooking' }}
+          CHECKED: ${{ needs.syntax.outputs.checked }}
+        run: |
+          count=$(jq --arg g "$GENRE" '[.books[] | select(.genre==$g)] | length' db/seed.json)
+          echo "$CHECKED files parse; $GENRE books: $count"
+
+  shells:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Default shell
+        run: false | true; echo "pipeline status $?"
+      - name: Explicit bash adds pipefail
+        shell: bash
+        continue-on-error: true
+        run: false | true; echo "not printed"
+      - name: Python as a shell
+        shell: python
+        run: import platform; print("Python", platform.python_version())
+
+  context:
+    runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
+    steps:
+      - name: Show some context values
+        env:
+          EVENT: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          PR: ${{ github.event.pull_request.number || 'none' }}
+          RUNNER: ${{ format('{0}/{1}', runner.os, runner.arch) }}
+          ON_MAIN: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          echo "event=$EVENT ref=$REF pr=$PR on_main=$ON_MAIN"
+          echo "runner=$RUNNER image=$ImageOS/$ImageVersion node=$(node --version)"
+
+  pr-note:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - run: |
+          echo "::notice::Pull request #${{ github.event.pull_request.number }}"
+
+  report:
+    needs: [syntax, catalog]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "syntax=${{ needs.syntax.result }} catalog=${{ needs.catalog.result }}"
+      - if: contains(needs.*.result, 'failure')
+        run: echo "::error::A job this report needs has failed" && exit 1
