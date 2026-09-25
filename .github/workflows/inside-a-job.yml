@@ -1,0 +1,19 @@
+name: Inside a job
+on: workflow_dispatch
+jobs:
+  on-the-runner:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Look around
+        run: |
+          echo "Runner $RUNNER_NAME: $ImageOS $ImageVersion, $(nproc) CPUs"
+          echo "Workspace $GITHUB_WORKSPACE, commit ${GITHUB_SHA::7}"
+          echo "::add-mask::shelf-key-1234"
+          echo "The shelf key is shelf-key-1234"
+          echo "::notice title=BookNest::Hello from job ${{ github.job }}"
+          echo "### Hello from the runner" >> "$GITHUB_STEP_SUMMARY"
+  in-a-container:
+    runs-on: ubuntu-24.04
+    container: node:24-alpine
+    steps:
+      - run: echo "Node $(node --version) on Alpine $(cat /etc/alpine-release)"
