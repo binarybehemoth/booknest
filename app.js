@@ -46,7 +46,10 @@ function createApp() {
         clauses.push(`title ILIKE $${params.length}`);
       }
       const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
-      const sorts = { price: 'price', rating: 'rating DESC', year: 'year DESC' };
+      const sorts = { price: 'price', rating: 'rating DESC', year: 'year DESC', title: 'title' };
+      if (req.query.sort !== undefined && !Object.hasOwn(sorts, req.query.sort)) {
+        return res.status(400).json({ error: `sort must be one of: ${Object.keys(sorts)}` });
+      }
       const order = sorts[req.query.sort] || 'id';
       params.push(Math.min(Number(req.query.limit) || 20, 100));
       let page = `LIMIT $${params.length}`;

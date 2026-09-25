@@ -43,7 +43,8 @@ change the port or database settings.
 | GET    | `/api/genres`    | Each genre with its number of books                |
 
 `/api/books` returns at most 20 books at a time: `?limit=` (up to 100) and `?offset=` page
-through the rest. `?sort=` accepts `price`, `rating` or `year`.
+through the rest. `?sort=` accepts `price`, `rating`, `year` or `title`; any other
+value is answered with 400.
 
 ## Contributing
 

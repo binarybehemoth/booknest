@@ -102,3 +102,14 @@ test('GET / serves the static front end', async () => {
   const html = await res.text();
   assert.match(html, /BookNest/);
 });
+
+test('GET /api/books?sort=title sorts by title', async () => {
+  const res = await fetch(`${baseUrl}/api/books?sort=title`);
+  const titles = (await res.json()).map((b) => b.title);
+  assert.deepEqual(titles, [...titles].sort());
+});
+
+test('GET /api/books rejects an unknown sort key', async () => {
+  const res = await fetch(`${baseUrl}/api/books?sort=colour`);
+  assert.equal(res.status, 400);
+});
