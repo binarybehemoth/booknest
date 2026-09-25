@@ -1,0 +1,29 @@
+name: Deploy
+on: workflow_dispatch
+permissions:
+  contents: read
+
+jobs:
+  staging:
+    runs-on: ubuntu-24.04
+    environment: staging
+    steps:
+      - name: Use a secret and a variable
+        env:
+          SHELF_API_KEY: ${{ secrets.SHELF_API_KEY }}
+        run: |
+          echo "Region ${{ vars.CATALOG_REGION }}, key $SHELF_API_KEY"
+          echo "Key length ${#SHELF_API_KEY}"
+          echo "Reversed, first 6: $(rev <<< "$SHELF_API_KEY" | cut -c1-6)"
+          echo "Base64: $(printf %s "$SHELF_API_KEY" | base64)"
+
+  production:
+    needs: staging
+    runs-on: ubuntu-24.04
+    environment:
+      name: production
+      url: https://booknest.example.com
+    steps:
+      - env:
+          SHELF_API_KEY: ${{ secrets.SHELF_API_KEY }}
+        run: echo "Deploying ${GITHUB_SHA::7} to ${{ vars.CATALOG_REGION }}, key $SHELF_API_KEY"
