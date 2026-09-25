@@ -1,0 +1,16 @@
+{
+  "name": "BookNest",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "forwardPorts": [3000],
+  "portsAttributes": {"3000": {"label": "BookNest API"}},
+  "postCreateCommand": "npm ci",
+  "postStartCommand": "docker compose up -d",
+  "hostRequirements": {"cpus": 2},
+  "customizations": {
+    "vscode": {"extensions": ["dbaeumer.vscode-eslint"]}
+  }
+}
