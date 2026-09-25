@@ -62,6 +62,9 @@ Every error is JSON with a single `error` field, for example `{"error":"book not
 Bug reports and pull requests are welcome. Open an issue first for anything larger than a
 small fix, so we can agree on the approach before you write the code.
 
+`main` is protected: every change arrives through a pull request, and review threads must be
+resolved before it merges.
+
 ## License
 
 BookNest is released under the [MIT License](LICENSE).
