@@ -36,3 +36,7 @@ and `?offset=` page through the rest.
 ## Local configuration
 
 Copy `.env.example` to `.env` and edit it. Git ignores `.env`.
+
+## Development
+
+`npm run dev` restarts the API every time you save a file.
