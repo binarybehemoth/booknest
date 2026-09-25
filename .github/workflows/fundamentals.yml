@@ -87,7 +87,8 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     steps:
-      - run: echo "::notice::Pull request #${{ github.event.pull_request.number }}"
+      - run: |
+          echo "::notice::Pull request #${{ github.event.pull_request.number }}"
 
   report:
     needs: [syntax, catalog]
