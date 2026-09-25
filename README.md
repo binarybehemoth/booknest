@@ -46,6 +46,17 @@ change the port or database settings.
 through the rest. `?sort=` accepts `price`, `rating`, `year` or `title`; any other
 value is answered with 400.
 
+## Errors
+
+Every error is JSON with a single `error` field, for example `{"error":"book not found"}`.
+
+| Status | When                                                       |
+|--------|------------------------------------------------------------|
+| 400    | `/api/books/:id` with a non-integer id, or an unknown `?sort=` |
+| 404    | An unknown book id, or any other path under `/api`         |
+| 500    | An unexpected server error; the details go to the log only |
+| 503    | `/ready` only: PostgreSQL cannot be reached                |
+
 ## Contributing
 
 Bug reports and pull requests are welcome. Open an issue first for anything larger than a
