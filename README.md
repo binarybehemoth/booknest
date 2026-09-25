@@ -9,6 +9,7 @@ PostgreSQL, with a static front end served by the API itself.
 docker compose up -d   # PostgreSQL on localhost:5432
 npm install            # express, pg
 npm start              # http://localhost:3000
+npm run dev            # the same, restarting on every save
 npm test               # node --test, real PostgreSQL
 ```
 
@@ -36,3 +37,7 @@ and `?offset=` page through the rest.
 ## Local configuration
 
 Copy `.env.example` to `.env` and edit it. Git ignores `.env`.
+
+## Development
+
+`npm run dev` restarts the API every time you save a file.
