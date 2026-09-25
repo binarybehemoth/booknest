@@ -1,4 +1,3 @@
-# Section 3.9: the building blocks of a workflow, run on BookNest's own files.
 name: Fundamentals
 run-name: Fundamentals on ${{ github.event_name }} by @${{ github.actor }}
 
@@ -10,19 +9,9 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
-      genre:
-        description: Genre to count in the seed data
-        type: choice
-        options: [Cooking, Fiction, Travel]
-        default: Cooking
-      runner:
-        description: Runner label for the context job
-        type: string
-        default: ubuntu-24.04
-      break-syntax:
-        description: Make the syntax job fail on purpose
-        type: boolean
-        default: false
+      genre: {type: choice, options: [Cooking, Fiction, Travel], default: Cooking}
+      runner: {type: string, default: ubuntu-24.04}
+      break-syntax: {type: boolean, default: false}
 
 permissions:
   contents: read

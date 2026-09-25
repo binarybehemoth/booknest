@@ -1,4 +1,3 @@
-# Section 3.9.3: a scheduled audit of BookNest's locked dependencies.
 name: Nightly audit
 
 on:
