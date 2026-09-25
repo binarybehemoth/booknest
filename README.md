@@ -15,7 +15,7 @@ curl "http://localhost:3000/api/books?genre=Cooking&sort=rating"
 ## Features
 
 - REST API on Node.js 24 and Express 5, with PostgreSQL 18 for storage
-- Title search (`?q=`), filters (`?genre=`, `?inStock=`), sorting and paging
+- Title search (`?q=`), filters (`?genre=`, `?inStock=`, `?author=`), sorting and paging
 - `/health` for liveness and `/ready` for readiness, ready for container platforms
 - Integration tests with Node's built-in test runner against a real database
 
@@ -38,7 +38,7 @@ change the port or database settings.
 |--------|------------------|----------------------------------------------------|
 | GET    | `/health`        | Liveness, no database check                        |
 | GET    | `/ready`         | Readiness, `SELECT 1` on PostgreSQL                |
-| GET    | `/api/books`     | Books; `?genre=`, `?inStock=`, `?q=`, `?sort=`     |
+| GET    | `/api/books`     | Books; `?genre=`, `?inStock=`, `?author=`, `?q=`, `?sort=` |
 | GET    | `/api/books/:id` | One book by id, or 404                             |
 | GET    | `/api/genres`    | Each genre with its number of books                |
 

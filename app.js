@@ -45,6 +45,10 @@ function createApp() {
         params.push(`%${req.query.q}%`);
         clauses.push(`title ILIKE $${params.length}`);
       }
+      if (req.query.author) {
+        params.push(req.query.author);
+        clauses.push(`author = $${params.length}`);
+      }
       const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
       const sorts = { price: 'price', rating: 'rating DESC', year: 'year DESC', title: 'title' };
       if (req.query.sort !== undefined && !Object.hasOwn(sorts, req.query.sort)) {
