@@ -1,0 +1,27 @@
+# Publishes packages/catalog to GitHub Packages' npm registry with the workflow's own token.
+name: Publish npm package
+on: workflow_dispatch
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://npm.pkg.github.com
+          scope: "@binarybehemoth"
+      - name: Publish
+        working-directory: packages/catalog
+        run: cp ../../db/seed.json . && npm publish
+      - name: Install it the way a consumer would
+        run: |
+          mkdir "$RUNNER_TEMP/consumer" && cd "$RUNNER_TEMP/consumer"
+          npm install --no-audit --no-fund @binarybehemoth/booknest-catalog
+          node -p "require('@binarybehemoth/booknest-catalog').map((b) => b.title).join(', ')"

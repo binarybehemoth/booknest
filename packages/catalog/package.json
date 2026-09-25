@@ -1,0 +1,14 @@
+{
+  "name": "@binarybehemoth/booknest-catalog",
+  "version": "1.0.0",
+  "description": "BookNest's six-book catalog as a JavaScript module",
+  "main": "index.js",
+  "files": ["index.js", "seed.json"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/binarybehemoth/booknest.git",
+    "directory": "packages/catalog"
+  },
+  "publishConfig": {"registry": "https://npm.pkg.github.com"},
+  "license": "MIT"
+}
