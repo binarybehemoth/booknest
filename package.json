@@ -1,6 +1,6 @@
 {
   "name": "booknest",
-  "version": "1.1.0-rc.0",
+  "version": "1.1.0",
   "description": "BookNest bookshop REST API: Node.js, Express and PostgreSQL",
   "private": true,
   "type": "commonjs",
