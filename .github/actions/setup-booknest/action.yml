@@ -1,0 +1,18 @@
+name: Set up BookNest
+description: Install Node.js from .nvmrc and BookNest's locked dependencies
+inputs:
+  omit-dev:
+    description: Leave out devDependencies
+    default: "false"
+outputs:
+  node-version:
+    description: The Node.js version that was installed
+    value: ${{ steps.node.outputs.node-version }}
+runs:
+  using: composite
+  steps:
+    - id: node
+      uses: actions/setup-node@v7
+      with: {node-version-file: .nvmrc, cache: npm}
+    - shell: bash
+      run: npm ci ${{ inputs.omit-dev == 'true' && '--omit=dev' || '' }}

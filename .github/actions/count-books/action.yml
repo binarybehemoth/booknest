@@ -1,0 +1,15 @@
+name: Count BookNest books
+description: Count the books of one genre in BookNest's seed data
+inputs:
+  genre:
+    description: Genre to count
+    required: true
+outputs:
+  count:
+    description: Number of books in the genre
+runs:
+  using: node24
+  main: index.js
+branding:
+  icon: book-open
+  color: blue

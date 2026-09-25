@@ -1,0 +1,19 @@
+name: OIDC claims
+on: workflow_dispatch
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  branch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - run: .github/scripts/oidc-claims.sh sts.amazonaws.com
+
+  staging:
+    runs-on: ubuntu-24.04
+    environment: staging
+    steps:
+      - uses: actions/checkout@v7
+      - run: .github/scripts/oidc-claims.sh sts.amazonaws.com

@@ -1,0 +1,21 @@
+name: Catalog
+on:
+  workflow_dispatch:
+    inputs:
+      genre: {type: string, default: Cooking}
+permissions:
+  contents: read
+
+jobs:
+  check:
+    uses: ./.github/workflows/catalog-check.yml
+    with:
+      genre: ${{ inputs.genre }}
+    secrets:
+      shelf-key: ${{ secrets.SHELF_API_KEY }}
+
+  report:
+    needs: check
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "The reusable workflow counted ${{ needs.check.outputs.count }} books"

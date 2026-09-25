@@ -1,0 +1,34 @@
+name: Catalog check
+on:
+  workflow_call:
+    inputs:
+      genre:
+        type: string
+        required: true
+    secrets:
+      shelf-key:
+        required: true
+    outputs:
+      count:
+        description: Books in the genre
+        value: ${{ jobs.count.outputs.count }}
+permissions:
+  contents: read
+
+jobs:
+  count:
+    runs-on: ubuntu-24.04
+    outputs:
+      count: ${{ steps.books.outputs.count }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: setup
+        uses: ./.github/actions/setup-booknest
+      - id: books
+        uses: ./.github/actions/count-books
+        with:
+          genre: ${{ inputs.genre }}
+      - env:
+          SHELF_API_KEY: ${{ secrets.shelf-key }}
+          NODE: ${{ steps.setup.outputs.node-version }}
+        run: echo "Node $NODE, key $SHELF_API_KEY, ${{ steps.books.outputs.count }} books"
